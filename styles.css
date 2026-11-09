@@ -1,0 +1,113 @@
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #090914;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.app {
+  min-height: 100vh;
+  padding-bottom: 90px;
+}
+
+.header {
+  background: #151326;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #30264b;
+}
+
+.header h1 {
+  color: #b78aff;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+button {
+  cursor: pointer;
+  border: 0;
+  color: white;
+}
+
+.header button {
+  background: #332052;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.main {
+  padding: 22px;
+}
+
+.main p {
+  color: #aaa;
+  margin: 12px 0;
+}
+
+.main h2 {
+  margin-bottom: 20px;
+}
+
+.wallet-card {
+  background: linear-gradient(135deg, #6936c8, #29145a);
+  padding: 25px;
+  border-radius: 20px;
+  margin: 20px 0;
+  box-shadow: 0 8px 25px #0005;
+}
+
+.wallet-card p {
+  color: white;
+}
+
+.wallet-card h1 {
+  font-size: 36px;
+  margin: 15px 0;
+}
+
+.wallet-card small {
+  color: #ddd;
+}
+
+.navigation {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #171426;
+  display: flex;
+  justify-content: space-around;
+  padding: 12px 3px;
+  border-top: 1px solid #49316b;
+  overflow-x: auto;
+}
+
+.navigation button {
+  background: transparent;
+  color: #aaa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  min-width: 55px;
+  font-size: 10px;
+}
+
+.navigation button.active {
+  color: #c49aff;
+}
+
+@media (min-width: 700px) {
+  .main {
+    max-width: 700px;
+    margin: auto;
+  }
+}
