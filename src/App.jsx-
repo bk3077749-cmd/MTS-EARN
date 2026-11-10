@@ -1,0 +1,182 @@
+
+import React, { useState } from 'react';
+import { supabase } from './supabase';
+
+export default function App() {
+  const [mode, setMode] = useState('login');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit() {
+    setMessage('');
+
+    if (!email || !password) {
+      setMessage('Email and password required');
+      return;
+    }
+
+    if (mode === 'register' && !name.trim()) {
+      setMessage('Please enter your full name');
+      return;
+    }
+
+    if (password.length < 6) {
+      setMessage('Password must be at least 6 characters');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      if (mode === 'register') {
+        const { data, error } = await supabase.auth.signUp({
+          email: email.trim(),
+          password,
+          options: {
+            data: { full_name: name.trim() }
+          }
+        });
+
+        if (error) throw error;
+
+        setMessage(
+          data.session
+            ? 'Account created successfully!'
+            : 'Account created! Check your email to confirm.'
+        );
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({
+          email: email.trim(),
+          password
+        });
+
+        if (error) throw error;
+
+        setMessage('Login successful! Welcome to SURYA EARN.');
+      }
+    } catch (error) {
+      setMessage(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div style={{
+      minHeight: '100vh',
+      background: '#090714',
+      color: 'white',
+      padding: 20,
+      fontFamily: 'Arial'
+    }}>
+      <div style={{
+        maxWidth: 420,
+        margin: '50px auto',
+        padding: 25,
+        background: '#171426',
+        borderRadius: 20,
+        border: '1px solid #49316b'
+      }}>
+        <h1 style={{
+          color: '#b78aff',
+          textAlign: 'center',
+          fontSize: 32
+        }}>
+          SURYA EARN
+        </h1>
+
+        <p style={{ textAlign: 'center', color: '#aaa' }}>
+          Your earning journey starts here
+        </p>
+
+        <h2>
+          {mode === 'login' ? 'Welcome Back!' : 'Create Account'}
+        </h2>
+
+        {mode === 'register' && (
+          <input
+            placeholder="Full Name"
+            value={name}
+            onChange={e => setName(e.target.value)}
+            style={field}
+          />
+        )}
+
+        <input
+          placeholder="Email Address"
+          type="email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          style={field}
+        />
+
+        <input
+          placeholder="Password"
+          type="password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          style={field}
+        />
+
+        <button
+          style={button}
+          disabled={loading}
+          onClick={handleSubmit}
+        >
+          {loading ? 'PLEASE WAIT...' : mode === 'login' ? 'LOGIN' : 'REGISTER'}
+        </button>
+
+        {message && (
+          <p style={{ color: '#d5b8ff', textAlign: 'center' }}>
+            {message}
+          </p>
+        )}
+
+        <button
+          style={{ ...button, background: '#38245b', marginTop: 15 }}
+          onClick={() => {
+            setMode(mode === 'login' ? 'register' : 'login');
+            setMessage('');
+          }}
+        >
+          {mode === 'login' ? 'CREATE NEW ACCOUNT' : 'BACK TO LOGIN'}
+        </button>
+
+        <p style={{
+          textAlign: 'center',
+          color: '#999',
+          marginTop: 25
+        }}>
+          SURYA EARN © 2026
+        </p>
+      </div>
+    </div>
+  );
+}
+
+const field = {
+  width: '100%',
+  boxSizing: 'border-box',
+  padding: 15,
+  marginBottom: 15,
+  background: '#090914',
+  color: 'white',
+  border: '1px solid #49316b',
+  borderRadius: 10,
+  fontSize: 16
+};
+
+const button = {
+  width: '100%',
+  padding: 15,
+  background: '#813fe0',
+  color: 'white',
+  border: 0,
+  borderRadius: 10,
+  fontWeight: 'bold',
+  fontSize: 16,
+  cursor: 'pointer'
+};
